@@ -22,4 +22,4 @@ COPY --from=builder /usr/share/go /usr/share/go
 
 ENV PRODUCT_CATALOG_PORT=8088
 # EXPOSE 8080
-CMD [ "./product-catalog" ]
+ENTRYPOINT [ "./product-catalog" ]
