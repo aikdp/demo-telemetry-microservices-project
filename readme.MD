@@ -83,3 +83,28 @@ sudo apt-get install terraform
 terraform --version
 ```
 
+4. Run Locally:
+5. Resize Volume:
+```
+df -h
+```
+1. Go to EC2--> Open Volume--> Modify volume to 50GB or 30Gb--> Volume State should -In-use (Wait for sometime)
+2. Now check inside EC2--> df -h, still same no disk increased.
+3. Check lsblk -->xvda is 50GB but xvda1--> is 7GB
+4. Run few commands to resize:
+```
+sudo apt install cloud-guest-utils
+
+sudo growpart /dev/xvda 1
+
+lsblk
+
+df -h
+sudo resize2fs /dev/xvda1
+
+df -h 
+
+```
+
+
+
