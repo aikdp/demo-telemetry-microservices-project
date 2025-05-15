@@ -13,13 +13,13 @@ RUN go mod download
 RUN go build -o product-catalog /usr/share/go
 
 #Stage2
-FROM alpine as run
+FROM alpine AS run
 
 WORKDIR /usr/share/go
 COPY ./products ./products
 
 COPY --from=builder /usr/share/go /usr/share/go
 
-ENV PRODUCT_CATALOG_PORT 8088
+ENV PRODUCT_CATALOG_PORT=8088
 # EXPOSE 8080
 CMD [ "./product-catalog" ]
