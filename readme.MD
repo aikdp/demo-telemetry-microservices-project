@@ -1,4 +1,4 @@
-# Telemetry Project
+# Telemetry Project (https://opentelemetry.io/docs/demo/architecture/)
 
 
 1. Create EC2 and Install Docker CLI (https://docs.docker.com/engine/install/ubuntu/)
