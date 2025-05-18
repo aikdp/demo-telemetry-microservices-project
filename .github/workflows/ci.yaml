@@ -45,7 +45,7 @@ jobs:
           uses: golangci/golangci-lint-action@v6
           with:
             version: v1.55.2
-            run: golangci-lint run 
+            run: golangci-lint run
             working-directory: catalog
 
     docker:
@@ -67,12 +67,12 @@ jobs:
             password: ${{ secrets.DOCKER_TOKEN }}
         
         - name: Build and push Docker image
-          uses: docker/build-push-action@v4
+          uses: docker/build-push-action@v6
           with:
             context: catalog
             file: catalog/Dockerfile
             push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
+            tags: kdprasad028/product-catalog:${{github.run_id}}
 
     update-k8s:
         runs-on: ubuntu-latest
