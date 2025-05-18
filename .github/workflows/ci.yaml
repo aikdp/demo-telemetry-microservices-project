@@ -95,4 +95,4 @@ jobs:
             git config --global user.email "kdprasad028@gmail.com"
             git add ./k8s-yamls/productcatalog/deploy.yaml
             git commit -m "Update image tag to ${{github.run_id}}"
-            git push 
+            git push origin HEAD:main -f
