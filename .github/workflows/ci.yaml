@@ -44,7 +44,7 @@ jobs:
         - name: Run golangci-lint
           uses: golangci/golangci-lint-action@v6
           with:
-            version: v1.56.2
+            version: v1.55.2
             run: golangci-lint run 
             working-directory: catalog
 
@@ -69,8 +69,8 @@ jobs:
         - name: Build and push Docker image
           uses: docker/build-push-action@v4
           with:
-            context: ./catalog
-            file: Dockerfile
+            context: catalog
+            file: catalog/Dockerfile
             push: true
             tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
 
