@@ -91,7 +91,7 @@ resource "aws_eip" "nat_eip_1" {
 #5. Nat gateway
 resource "aws_nat_gateway" "nat_gw_1" {
   allocation_id = aws_eip.nat_eip_1.id
-  subnet_id     = aws_subnet.public[0].id #here one nat gw creating, if you 2, create EIP and NGW one more
+  subnet_id     = aws_subnet.public[0].id #here one nat gw creating, if you want 2, create EIP and NGW one more
 
   tags = {
     Name = "${local.module_name}-NAT1"
@@ -124,6 +124,7 @@ resource "aws_nat_gateway" "nat_gw_2" {
   # on the Internet Gateway for the VPC.
   depends_on = [aws_nat_gateway.nat_gw_1]
 }
+
 
 #6. Route Tables; one Rt suffiecmt for two or more AZ, IGW is VPC level
 resource "aws_route_table" "public" {
