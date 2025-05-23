@@ -22,10 +22,12 @@ jobs:
           run: |
             cd catalog
             go mod download
-            go build -o product-catalog-service ./catalog/main.go
+            go build -o product-catalog-service ./main.go
 
         - name: run tests
-          run: go test ./catalog/...
+          run: |
+            cd catalog 
+            go test ./...
         
     code-quality:
         runs-on: ubuntu-latest
@@ -34,10 +36,17 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v4
         
+        - name: Setup Go 1.22
+          uses: actions/setup-go@v2
+          with:
+           go-version: 1.22
+        
         - name: Run golangci-lint
-          run: |
-            go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.56.2
-            golangci-lint run ./catalog/...
+          uses: golangci/golangci-lint-action@v6
+          with:
+            version: v1.55.2
+            # run: golangci-lint run
+            working-directory: catalog
 
     docker:
         runs-on: ubuntu-latest
@@ -58,12 +67,12 @@ jobs:
             password: ${{ secrets.DOCKER_TOKEN }}
         
         - name: Build and push Docker image
-          uses: docker/build-push-action@v4
+          uses: docker/build-push-action@v6
           with:
-            context: ./catalog
-            file: Dockerfile
+            context: catalog
+            file: catalog/Dockerfile
             push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
+            tags: kdprasad028/product-catalog:${{github.run_id}}
 
     update-k8s:
         runs-on: ubuntu-latest
@@ -78,7 +87,7 @@ jobs:
 
         - name: Update tag with kubernetes manifest
           run: |
-            sed -i 's/image: .*/image: ${{secrets.DOCKER_USERNAME}}/product-catalog:${{github.run_id}}/' ./k8s-yamls/productcatalog/deploy.yaml
+            sed -i "s|image: .*|image: ${{secrets.DOCKER_USERNAME}}/product-catalog:${{github.run_id}}|" ./k8s-yamls/productcatalog/deploy.yaml
         
         - name: Commit and push changes
           run: |
@@ -86,4 +95,4 @@ jobs:
             git config --global user.email "kdprasad028@gmail.com"
             git add ./k8s-yamls/productcatalog/deploy.yaml
             git commit -m "Update image tag to ${{github.run_id}}"
-            git push 
+            git push origin HEAD:main -f
